@@ -1,7 +1,7 @@
 package main
 
 import "core:fmt"
-import "core:strings"
+//import "core:strings"
 import sdl "vendor:sdl3"
 import ttf "vendor:sdl3/ttf"
 
@@ -79,7 +79,8 @@ handle_events :: proc(state: ^Game_State) {
 			state.is_running = false
 		case .KEY_DOWN:
 			if event.key.scancode == .ESCAPE do state.is_running = false
-		case .MOUSE_MOTION:
+		case .MOUSE_MOTION: //when the mouse move
+
 		//state.mouse_coord[0] = event.motion.x
 		//state.mouse_coord[1] = event.motion.y
 		}
