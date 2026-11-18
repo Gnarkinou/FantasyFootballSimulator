@@ -8,15 +8,18 @@ import ttf "vendor:sdl3/ttf"
 SCREEN_WIDTH :: 1280
 SCREEN_HEIGHT :: 1024
 TILE_SIZE :: 64
+WIDTH_TILES_PITCH :: 28
+HEIGHT_TILES_PITCH :: 15
 
 Game_State :: struct {
-	window:         ^sdl.Window,
-	renderer:       ^sdl.Renderer,
-	is_running:     bool,
-	is_pause:       bool,
-	player_id_turn: u8,
-	font:           ^ttf.Font,
-	mode:           Game_Mode,
+	window:          ^sdl.Window,
+	renderer:        ^sdl.Renderer,
+	is_running:      bool,
+	is_pause:        bool,
+	player_id_turn:  u8,
+	list_grid_pitch: [WIDTH_TILES_PITCH][HEIGHT_TILES_PITCH]^Ground_Tile,
+	font:            ^ttf.Font,
+	mode:            Game_Mode,
 }
 
 Game_Mode :: enum {
@@ -27,6 +30,17 @@ Game_Mode :: enum {
 Player :: struct {
 	name: string,
 	id:   u8,
+}
+
+Ground_Tile :: struct {
+	tile:             sdl.FRect,
+	texture:          sdl.Texture,
+	has_player:       bool,
+	has_ball:         bool,
+	is_outside_pitch: bool,
+	is_touchdown:     bool,
+	is_selected:      bool,
+	is_hovered:       bool,
 }
 
 main :: proc() {
