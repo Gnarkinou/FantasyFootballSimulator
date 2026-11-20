@@ -14,6 +14,7 @@ HEIGHT_TILES_PITCH :: 15
 Game_State :: struct {
 	window:          ^sdl.Window,
 	renderer:        ^sdl.Renderer,
+	scroll_coord:    [2]int,
 	is_running:      bool,
 	is_pause:        bool,
 	player_id_turn:  u8,
