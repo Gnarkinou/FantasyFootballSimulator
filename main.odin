@@ -8,16 +8,17 @@ import ttf "vendor:sdl3/ttf"
 SCREEN_WIDTH :: 1280
 SCREEN_HEIGHT :: 1024
 TILE_SIZE :: 64
-WIDTH_TILES_PITCH :: 28
-HEIGHT_TILES_PITCH :: 15
+WIDTH_TILES_PITCH :: 15
+HEIGHT_TILES_PITCH :: 28
 
 Game_State :: struct {
 	window:          ^sdl.Window,
 	renderer:        ^sdl.Renderer,
 	scroll_coord:    [2]int,
+	zoom:            u8,
+	zoom_max:        u8,
 	is_running:      bool,
 	is_pause:        bool,
-	player_id_turn:  u8,
 	list_grid_pitch: [WIDTH_TILES_PITCH][HEIGHT_TILES_PITCH]^Ground_Tile,
 	font:            ^ttf.Font,
 	mode:            Game_Mode,
@@ -28,14 +29,9 @@ Game_Mode :: enum {
 	home,
 }
 
-Player :: struct {
-	name: string,
-	id:   u8,
-}
-
 Ground_Tile :: struct {
 	tile:             sdl.FRect,
-	texture:          sdl.Texture,
+	texture:          ^sdl.Texture,
 	has_player:       bool,
 	has_ball:         bool,
 	is_outside_pitch: bool,
@@ -55,6 +51,8 @@ main :: proc() {
 		is_running = true,
 		is_pause   = false,
 		mode       = .home,
+		zoom       = 1,
+		zoom_max   = 4,
 	}
 
 	state.window = sdl.CreateWindow("Rugby Fantasy Simulator 0.0", SCREEN_WIDTH, SCREEN_HEIGHT, {})
