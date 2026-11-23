@@ -12,6 +12,7 @@ init_pitch :: proc(state: ^Game_State) {
 		for j := 0; j <= WIDTH_TILES_PITCH; j += 1 {
 			state.list_grid_pitch[j][i].is_touchdown = false
 			state.list_grid_pitch[j][i].is_outside_pitch = false
+			//state.list_grid_pitch[j][i].tile_rect
 			switch j {
 			case 0:
 				path = "sources/tiles_pitch/Ligne_vertical_droite.png"
@@ -75,8 +76,10 @@ init_pitch :: proc(state: ^Game_State) {
 }
 
 draw_pitch :: proc(state: ^Game_State) {
-	for &tile in state.list_grid_pitch {
+	for &tile_h in state.list_grid_pitch {
+		for &tile in tile_h {
+
+		}
 
 	}
-
 }

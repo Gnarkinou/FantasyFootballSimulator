@@ -30,7 +30,7 @@ Game_Mode :: enum {
 }
 
 Ground_Tile :: struct {
-	tile:             sdl.FRect,
+	tile_rect:        sdl.FRect,
 	texture:          ^sdl.Texture,
 	has_player:       bool,
 	has_ball:         bool,
@@ -48,11 +48,12 @@ main :: proc() {
 	defer sdl.Quit()
 
 	state := Game_State {
-		is_running = true,
-		is_pause   = false,
-		mode       = .home,
-		zoom       = 1,
-		zoom_max   = 4,
+		is_running   = true,
+		is_pause     = false,
+		mode         = .home,
+		zoom         = 1,
+		zoom_max     = 4,
+		scroll_coord = {0, 0},
 	}
 
 	state.window = sdl.CreateWindow("Rugby Fantasy Simulator 0.0", SCREEN_WIDTH, SCREEN_HEIGHT, {})
