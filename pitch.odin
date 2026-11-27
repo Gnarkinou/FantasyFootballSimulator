@@ -12,43 +12,41 @@ init_pitch :: proc(state: ^Game_State) {
 		for j := 0; j <= WIDTH_TILES_PITCH; j += 1 {
 			state.list_grid_pitch[j][i].is_touchdown = false
 			state.list_grid_pitch[j][i].is_outside_pitch = false
-			//state.list_grid_pitch[j][i].tile_rect
+			state.list_grid_pitch[j][i].tile_rect.x = f32(
+				TILE_SIZE * i * int(state.zoom) - state.scroll_coord[0],
+			)
+			state.list_grid_pitch[j][i].tile_rect.y = f32(
+				TILE_SIZE * j * int(state.zoom) - state.scroll_coord[1],
+			)
+			state.list_grid_pitch[j][i].tile_rect.w = f32(TILE_SIZE * int(state.zoom))
+			state.list_grid_pitch[j][i].tile_rect.h = f32(TILE_SIZE * int(state.zoom))
+
 			switch j {
 			case 0:
-				path = "sources/tiles_pitch/Ligne_vertical_droite.png"
-				state.list_grid_pitch[j][i].is_outside_pitch = true
-			case 1:
-				path = "sources/tiles_pitch/Ligne_vertical_gauche.png"
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/border_left_marks.png"
 			case 3:
-				path = "sources/tiles_pitch/Ligne_vertical_droite.png"
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/border_right_marks.png"
 			case WIDTH_TILES_PITCH - 3:
-				path = "sources/tiles_pitch/Ligne_vertical_gauche.png"
-			case WIDTH_TILES_PITCH - 1:
-				path = "sources/tiles_pitch/Ligne_vertical_droite.png"
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/border_left_marks.png"
 			case WIDTH_TILES_PITCH:
-				path = "sources/tiles_pitch/Ligne_vertical_gauche.png"
-				state.list_grid_pitch[j][i].is_outside_pitch = true
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/border_right_marks.png"
 			}
 
 			switch i {
 			case 0:
-				state.list_grid_pitch[j][i].is_outside_pitch = true
-			case 1:
-				path = "sources/tiles_pitch/Ligne_horizontale_bas.png"
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/border_bottom_marks.png"
 				state.list_grid_pitch[j][i].is_touchdown = true
-			case 2:
+			case 1:
 				path = "sources/tiles_pitch/Ligne_horizontale_haut.png"
 			case (HEIGHT_TILES_PITCH / 2) - 1:
-				path = "sources/tiles_pitch/Ligne_horizontale_bas.png"
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/middle_circle_down.png"
 			case HEIGHT_TILES_PITCH / 2:
-				path = "sources/tiles_pitch/Ligne_horizontale_haut.png"
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/middle_circle_top.png"
 			case HEIGHT_TILES_PITCH - 1:
-				path = "sources/tiles_pitch/Ligne_horizontale_haut.png"
-				state.list_grid_pitch[j][i].is_touchdown = true
-			case HEIGHT_TILES_PITCH - 2:
-				path = "sources/tiles_pitch/Ligne_horizontale_bas.png"
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/border_bottom_marks.png"
 			case HEIGHT_TILES_PITCH:
-				state.list_grid_pitch[j][i].is_outside_pitch = true
+				path = "/home/mouton/Project/FantasyFootballSimulator/sources/tiles_pitch/pitch_2/border_top_marks.png"
+				state.list_grid_pitch[j][i].is_touchdown = true
 			}
 
 			state.list_grid_pitch[j][i].has_ball = false
