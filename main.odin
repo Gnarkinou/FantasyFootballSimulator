@@ -19,7 +19,8 @@ Game_State :: struct {
 	zoom_max:        u8,
 	is_running:      bool,
 	is_pause:        bool,
-	list_grid_pitch: [WIDTH_TILES_PITCH][HEIGHT_TILES_PITCH]^Ground_Tile,
+	scroll_delta:    u8,
+	list_grid_pitch: [WIDTH_TILES_PITCH][HEIGHT_TILES_PITCH]Ground_Tile,
 	font:            ^ttf.Font,
 	mode:            Game_Mode,
 }
@@ -50,10 +51,11 @@ main :: proc() {
 	state := Game_State {
 		is_running   = true,
 		is_pause     = false,
-		mode         = .home,
+		mode         = .pitch,
 		zoom         = 1,
 		zoom_max     = 4,
 		scroll_coord = {0, 0},
+		scroll_delta = 10,
 	}
 
 	state.window = sdl.CreateWindow("Rugby Fantasy Simulator 0.0", SCREEN_WIDTH, SCREEN_HEIGHT, {})
@@ -77,6 +79,8 @@ main :: proc() {
 	}
 
 	sdl.SetRenderDrawBlendMode(state.renderer, sdl.BLENDMODE_BLEND)
+	init_pitch(&state)
+	defer clear_all(&state)
 
 	for state.is_running {
 		handle_events(&state)
@@ -92,7 +96,31 @@ handle_events :: proc(state: ^Game_State) {
 		case .QUIT:
 			state.is_running = false
 		case .KEY_DOWN:
+			resized_needed: bool = false
+			fmt.println("The key pressed is: ", event.key.scancode)
 			if event.key.scancode == .ESCAPE do state.is_running = false
+			if event.key.scancode == .DOWN && state.mode == .pitch {
+				resized_needed = true
+				state.scroll_coord[1] += int(state.scroll_delta)
+				fmt.println("Adding to the scrolling")
+			} else if event.key.scancode == .UP && state.mode == .pitch {
+				resized_needed = true
+				state.scroll_coord[1] -= int(state.scroll_delta)
+				if state.scroll_coord[1] < -100 do state.scroll_coord[1] = -100
+				fmt.println("Adding to the scrolling")
+			} else if event.key.scancode == .RIGHT && state.mode == .pitch {
+				resized_needed = true
+				state.scroll_coord[0] += int(state.scroll_delta)
+				fmt.println("Adding to the scrolling")
+
+			} else if event.key.scancode == .LEFT && state.mode == .pitch {
+				resized_needed = true
+				state.scroll_coord[0] -= int(state.scroll_delta)
+				if state.scroll_coord[0] < -100 do state.scroll_coord[0] = -100
+				fmt.println("Adding to the scrolling")
+			}
+			fmt.println(state.scroll_coord)
+			if resized_needed do resize_pitch_tiles_rect(state)
 		case .MOUSE_MOTION: //when the mouse move
 
 		//state.mouse_coord[0] = event.motion.x
@@ -106,6 +134,14 @@ update :: proc(state: ^Game_State) {
 }
 
 render :: proc(state: ^Game_State) {
-	sdl.SetRenderDrawColor(state.renderer, 20, 20, 20, 255)
-	sdl.RenderClear(state.renderer)
+	if !sdl.SetRenderDrawColor(state.renderer, 20, 20, 20, 255) {
+		fmt.println("SetRenderDrawCOlor failed: ", sdl.GetError())
+	}
+	if !sdl.RenderClear(state.renderer) do fmt.println("Renderer clear failed: ", sdl.GetError())
+	draw_pitch(state)
+	sdl.RenderPresent(state.renderer)
+}
+
+clear_all :: proc(state: ^Game_State) {
+	clear_pitch(state)
 }
